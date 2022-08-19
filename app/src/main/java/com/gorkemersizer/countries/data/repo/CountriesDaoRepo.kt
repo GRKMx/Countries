@@ -18,13 +18,29 @@ class CountriesDaoRepo(var cdao: CountriesDao, var cfdao: CountryFavsDao) {
     var countryDetail: MutableLiveData<CountryDetail> = MutableLiveData()
     var favList: MutableLiveData<List<CountryFav>> = MutableLiveData()
 
+    /**
+     *  Countries ----------------------------------------------------------------------------------
+     */
+
+    /**
+     *  Returns list of country
+     */
+
     fun getCountries() : MutableLiveData<List<Country>> {
         return countryList
     }
 
+    /**
+     *  Returns the country detail
+     */
+
     fun getTheCountryDetail() : MutableLiveData<CountryDetail> {
         return countryDetail
     }
+
+    /**
+     *  Get list of country by api
+     */
 
     fun getAllCountries() {
         cdao.getCountries(API_KEY, LIMIT).enqueue(object: Callback<CountryResponse>{
@@ -41,6 +57,10 @@ class CountriesDaoRepo(var cdao: CountriesDao, var cfdao: CountryFavsDao) {
         })
     }
 
+    /**
+     *  Get the country by api
+     */
+
     fun getCountry(countryCode: String) {
             cdao.getCountryDetail(countryCode, API_KEY).enqueue(object: Callback<CountryDetailResponse>{
                 override fun onResponse(
@@ -56,11 +76,17 @@ class CountriesDaoRepo(var cdao: CountriesDao, var cfdao: CountryFavsDao) {
             })
     }
 
-    // ------------------------------------------------------------------------------------------------------------------------
+    /**
+     *   Saved Countries ---------------------------------------------------------------------------
+     */
 
     fun getCountryFavList() : MutableLiveData<List<CountryFav>> {
         return favList
     }
+
+    /**
+     *  Save the country to database
+     */
 
     fun addCountryFav(code: String, name: String) {
         val job = CoroutineScope(Dispatchers.Main).launch {
@@ -70,6 +96,10 @@ class CountriesDaoRepo(var cdao: CountriesDao, var cfdao: CountryFavsDao) {
         }
     }
 
+    /**
+     *  Delete the saved country from database
+     */
+
     fun deleteCountryFav(code: String, name: String) {
         val job = CoroutineScope(Dispatchers.Main).launch {
             val deletedCountryFav = CountryFav(code, name)
@@ -77,6 +107,10 @@ class CountriesDaoRepo(var cdao: CountriesDao, var cfdao: CountryFavsDao) {
             getAllCountryFavs()
         }
     }
+
+    /**
+     *  Get list of saved country from database
+     */
 
     fun getAllCountryFavs() {
         val job = CoroutineScope(Dispatchers.Main).launch {

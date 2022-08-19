@@ -25,6 +25,11 @@ class DetailScreen : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail_screen, container, false)
 
         viewModel.countryDetail.observe(viewLifecycleOwner) {
+
+            /**
+             * Set the fav icon color
+             */
+
             if (viewModel.favList.value!!.contains(CountryFav(it.code!!, it.name!!))){
                 binding.imageViewFavButton.setImageResource(R.drawable.ic_star_black)
             }
@@ -34,11 +39,22 @@ class DetailScreen : Fragment() {
             binding.countryDetailObject = viewModel.countryDetail.value
             binding.imageViewCountry.downloadFromUrl(it?.flagImageUri)
         }
+
         binding.detailScreenFragment = this
+
+        /**
+         * Navigate to wikidata when button clicked
+         */
+
         binding.buttonForMoreInfo.setOnClickListener {
             val i =  Intent(Intent.ACTION_VIEW, Uri.parse(WIKI_URL+viewModel.countryDetail.value!!.wikiDataId))
             startActivity(i)
         }
+
+        /**
+         * Add or Delete a country to/from favourites item when icon clicked
+         */
+
         binding.imageViewFavButton.setOnClickListener {
             val countryFromDetail = viewModel.countryDetail.value
             val countryCode = countryFromDetail!!.code!!
@@ -68,6 +84,10 @@ class DetailScreen : Fragment() {
         val tempViewModel: DetailScreenViewModel by viewModels()
         viewModel = tempViewModel
     }
+
+    /**
+     * Navigate home page when button clicked
+     */
 
     fun backButtonClicked(v: View) {
         val action = DetailScreenDirections.actionDetailScreenToHomeScreen()

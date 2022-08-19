@@ -20,18 +20,34 @@ class HomeScreenViewModel @Inject constructor(var crepo: CountriesDaoRepo): View
         favList = crepo.getCountryFavList()
     }
 
+    /**
+     * Present list of all countries
+     */
+
     fun getAllCountries() {
         crepo.getAllCountries()
     }
+
+    /**
+     * Get list of saved country from database
+     */
 
     fun getFavList() {
         crepo.getAllCountryFavs()
     }
 
+    /**
+     *  Save the country to database
+     */
+
     fun addCountryToFav(code: String, name: String) {
         crepo.addCountryFav(code, name)
         favList = crepo.getCountryFavList()
     }
+
+    /**
+     *  Delete the saved country from database
+     */
 
     fun deleteCountryFromFav(code: String, name: String) {
         crepo.deleteCountryFav(code, name)

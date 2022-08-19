@@ -36,12 +36,21 @@ class CountryAdapter(
         val country = countryList[position]
         val t =holder.binding
         t.countryObject = country
+
+        /**
+         * Set the fav icon color
+         */
+
         if (viewModel.favList.value!!.contains(CountryFav(country.code!!, country.name!!))){
             t.imageView.setImageResource(R.drawable.ic_star_black)
         }
         else if (!viewModel.favList.value!!.contains(CountryFav(country.code, country.name))){
             t.imageView.setImageResource(R.drawable.ic_star_gray)
         }
+
+        /**
+         *  Navigate to detail screen when a country clicked
+         */
 
         t.cardRow.setOnClickListener {
             val code = country.code.toString()
@@ -50,6 +59,11 @@ class CountryAdapter(
                 Navigation.findNavController(it).navigate(action)
             }catch (e: Exception){}
         }
+
+        /**
+         * Add or Delete a country to/from favourites when icon clicked
+         */
+
         t.imageView.setOnClickListener {
             if (viewModel.favList.value!!.contains(CountryFav(country.code, country.name))){
                 viewModel.deleteCountryFromFav(country.code, country.name)

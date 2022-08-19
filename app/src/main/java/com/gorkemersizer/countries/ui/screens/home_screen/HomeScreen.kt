@@ -22,6 +22,11 @@ class HomeScreen : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home_screen, container, false)
         binding.homeScreenFragment = this
+
+        /**
+         * Present list of all countries
+         */
+
         viewModel.countryList.observe(viewLifecycleOwner) {
             val adapter = CountryAdapter(requireContext(), it, viewModel)
             binding.countriesAdapter = adapter

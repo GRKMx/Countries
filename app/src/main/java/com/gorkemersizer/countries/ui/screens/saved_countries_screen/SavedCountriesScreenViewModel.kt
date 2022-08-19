@@ -15,9 +15,17 @@ class SavedCountriesScreenViewModel @Inject constructor(var crepo: CountriesDaoR
         favList = crepo.getCountryFavList()
     }
 
+    /**
+     *  Get list of saved country from database
+     */
+
     fun getFavList() {
         crepo.getAllCountryFavs()
     }
+
+    /**
+     *  Delete the saved country from database
+     */
 
     fun deleteCountryFromFav(code: String, name: String) {
         crepo.deleteCountryFav(code, name)

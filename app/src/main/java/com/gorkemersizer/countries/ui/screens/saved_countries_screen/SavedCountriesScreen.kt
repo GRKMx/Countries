@@ -23,6 +23,10 @@ class SavedCountriesScreen : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_saved_countries_screen, container, false)
         binding.savedCountriesFragment = this
 
+        /**
+         * Present list of saved countries
+         */
+
         viewModel.favList.observe(viewLifecycleOwner) {
             val adapter = CountryFavAdapter(requireContext(), it, viewModel)
             binding.countryFavsAdapter = adapter

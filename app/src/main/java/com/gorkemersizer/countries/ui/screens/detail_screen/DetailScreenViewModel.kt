@@ -20,18 +20,34 @@ class DetailScreenViewModel @Inject constructor(var crepo: CountriesDaoRepo): Vi
         favList = crepo.getCountryFavList()
     }
 
+    /**
+     * Get a country with details by api
+     */
+
     fun getCountry(countryCode: String) {
         crepo.getCountry(countryCode)
     }
+
+    /**
+     * Get a list of saved countries from database
+     */
 
     fun getFavList() {
         crepo.getAllCountryFavs()
     }
 
+    /**
+     * Save the country to favourites
+     */
+
     fun addCountryToFav(code: String, name: String) {
         crepo.addCountryFav(code, name)
         favList = crepo.getCountryFavList()
     }
+
+    /**
+     * Delete the country from favourites
+     */
 
     fun deleteCountryFromFav(code: String, name: String) {
         crepo.deleteCountryFav(code, name)

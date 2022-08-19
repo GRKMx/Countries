@@ -34,9 +34,19 @@ class CountryFavAdapter(
         val country = favList[position]
         val t = holder.binding
         t.countryFavObject = country
+
+        /**
+         * Delete a country from favourites when icon clicked
+         */
+
         t.imageView.setOnClickListener {
             viewModel.deleteCountryFromFav(country.code, country.name)
         }
+
+        /**
+         *  Navigate to detail screen when a country clicked
+         */
+
         t.cardRow.setOnClickListener {
             val code = country.code
             val action = SavedCountriesScreenDirections.actionSavedCountriesScreenToDetailScreen(code)
