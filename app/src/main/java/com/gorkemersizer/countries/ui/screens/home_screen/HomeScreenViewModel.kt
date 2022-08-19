@@ -14,6 +14,10 @@ import javax.inject.Inject
 class HomeScreenViewModel @Inject constructor(var crepo: CountriesDaoRepo): ViewModel() {
     var countryList = MutableLiveData<List<Country>>()
     var favList = MutableLiveData<List<CountryFav>>()
+
+    val countryError=MutableLiveData<Boolean>()
+    val countryLoading=MutableLiveData<Boolean>()
+
     init {
         getAllCountries()
         countryList = crepo.getCountries()

@@ -2,11 +2,13 @@ package com.gorkemersizer.countries.ui.screens.detail_screen
 
 import android.content.Intent
 import android.net.Uri
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.*
 import androidx.navigation.Navigation
@@ -32,6 +34,12 @@ class DetailScreen : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail_screen, container, false)
 
         viewModel.countryDetail.observe(viewLifecycleOwner) {
+            if (viewModel.favList.value!!.contains(CountryFav(it.code!!, it.name!!))){
+                binding.imageViewFavButton.setImageResource(R.drawable.ic_star_black)
+            }
+            else if (!viewModel.favList.value!!.contains(CountryFav(it.code, it.name))){
+                binding.imageViewFavButton.setImageResource(R.drawable.ic_star_gray)
+            }
             binding.countryDetailObject = viewModel.countryDetail.value
             binding.imageViewCountry.downloadFromUrl(it?.flagImageUri)
         }
@@ -40,20 +48,6 @@ class DetailScreen : Fragment() {
             val i =  Intent(Intent.ACTION_VIEW, Uri.parse(WIKI_URL+viewModel.countryDetail.value!!.wikiDataId))
             startActivity(i)
         }
-// --------------
-        /*
-        val countryFromDetail = viewModel.countryDetail.value
-        val countryCode = countryFromDetail!!.code!!
-        val countryName = countryFromDetail.name!!
-        if (viewModel.favList.value!!.contains(CountryFav(countryCode, countryName))){
-            binding.imageViewFavButton.setImageResource(R.drawable.ic_star_black)
-        }
-        else if (!viewModel.favList.value!!.contains(CountryFav(countryCode, countryName))){
-            binding.imageViewFavButton.setImageResource(R.drawable.ic_star_gray)
-        }
-
-         */
-
         binding.imageViewFavButton.setOnClickListener {
             val countryFromDetail = viewModel.countryDetail.value
             val countryCode = countryFromDetail!!.code!!
@@ -66,7 +60,6 @@ class DetailScreen : Fragment() {
                 binding.imageViewFavButton.setImageResource(R.drawable.ic_star_black)
             }
         }
-//---------------
         return binding.root
     }
 
