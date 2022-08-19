@@ -3,7 +3,7 @@
 Countries has been made for you to see country information with details. You can see country names, flags, codes. Also you can get more information with wikidata with just a click of a button!
 This app allows you to save countries to your favorites and be presented on their own page!
 
-#Technologies
+# Technologies
 
 MVVM \
 Kotlin \
