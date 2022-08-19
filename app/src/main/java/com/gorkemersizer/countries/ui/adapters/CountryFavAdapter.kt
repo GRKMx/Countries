@@ -7,9 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.gorkemersizer.countries.R
-import com.gorkemersizer.countries.data.entity.Country
 import com.gorkemersizer.countries.data.entity.CountryFav
-import com.gorkemersizer.countries.databinding.CountryCardDesignBinding
 import com.gorkemersizer.countries.databinding.CountryfavCardDesignBinding
 import com.gorkemersizer.countries.ui.screens.saved_countries_screen.SavedCountriesScreenDirections
 import com.gorkemersizer.countries.ui.screens.saved_countries_screen.SavedCountriesScreenViewModel

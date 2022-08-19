@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import com.gorkemersizer.countries.R
 import com.gorkemersizer.countries.databinding.FragmentSavedCountriesScreenBinding
 import com.gorkemersizer.countries.ui.adapters.CountryFavAdapter
-import com.gorkemersizer.countries.ui.screens.home_screen.HomeScreenViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -1,14 +1,10 @@
 package com.gorkemersizer.countries.util
 
 import android.widget.ImageView
-import androidx.databinding.BindingAdapter
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.gorkemersizer.countries.R
-import com.squareup.picasso.Picasso
 
 fun ImageView.downloadFromUrl(url: String?) {
     val imageLoader = ImageLoader.Builder(this.context)

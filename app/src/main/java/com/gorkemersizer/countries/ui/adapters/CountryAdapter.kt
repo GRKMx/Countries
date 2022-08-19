@@ -1,7 +1,6 @@
 package com.gorkemersizer.countries.ui.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -11,7 +10,6 @@ import com.gorkemersizer.countries.R
 import com.gorkemersizer.countries.data.entity.Country
 import com.gorkemersizer.countries.data.entity.CountryFav
 import com.gorkemersizer.countries.databinding.CountryCardDesignBinding
-import com.gorkemersizer.countries.databinding.FragmentHomeScreenBinding
 import com.gorkemersizer.countries.ui.screens.home_screen.HomeScreenDirections
 import com.gorkemersizer.countries.ui.screens.home_screen.HomeScreenViewModel
 import java.lang.Exception
@@ -50,9 +48,7 @@ class CountryAdapter(
             val action = HomeScreenDirections.actionHomeScreenToDetailScreen(code)
             try {
                 Navigation.findNavController(it).navigate(action)
-            }catch (e: Exception){
-                Log.d("hatayakala","hata yakalandı ${e}")
-            }
+            }catch (e: Exception){}
         }
         t.imageView.setOnClickListener {
             if (viewModel.favList.value!!.contains(CountryFav(country.code, country.name))){

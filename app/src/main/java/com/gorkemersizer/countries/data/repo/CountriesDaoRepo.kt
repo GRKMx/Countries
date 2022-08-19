@@ -36,8 +36,6 @@ class CountriesDaoRepo(var cdao: CountriesDao, var cfdao: CountryFavsDao) {
                     val list = response.body()!!.data
                     countryList.value = list
                 }
-                //val list = response.body()!!.data
-                //countryList.value = list
             }
             override fun onFailure(call: Call<CountryResponse>, t: Throwable) {}
         })
@@ -53,11 +51,7 @@ class CountriesDaoRepo(var cdao: CountriesDao, var cfdao: CountryFavsDao) {
                         val detail = response.body()!!.data
                         countryDetail.value = detail
                     }
-                    //val detail = response.body().data
-                    //countryDetail.value = detail
                 }
-                //val detail = response.body()!!.data
-                //countryDetail.value = detail
                 override fun onFailure(call: Call<CountryDetailResponse>, t: Throwable) {}
             })
     }

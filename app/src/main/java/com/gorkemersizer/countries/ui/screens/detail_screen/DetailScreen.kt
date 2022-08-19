@@ -2,26 +2,17 @@ package com.gorkemersizer.countries.ui.screens.detail_screen
 
 import android.content.Intent
 import android.net.Uri
-import android.opengl.Visibility
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.*
 import androidx.navigation.Navigation
-import com.bumptech.glide.Glide
 import com.gorkemersizer.countries.R
 import com.gorkemersizer.countries.data.entity.CountryFav
 import com.gorkemersizer.countries.databinding.FragmentDetailScreenBinding
-import com.gorkemersizer.countries.ui.screens.home_screen.HomeScreenDirections
 import com.gorkemersizer.countries.util.Constants.WIKI_URL
 import com.gorkemersizer.countries.util.downloadFromUrl
-import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.Exception
 
 @AndroidEntryPoint
 class DetailScreen : Fragment() {
