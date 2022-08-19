@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <variable name="countryObject" type="com.gorkemersizer.countries.data.entity.Country" />
+        <variable name="countryFavObject" type="com.gorkemersizer.countries.data.entity.CountryFav" />
         <variable name="homeScreenViewModel" type="com.gorkemersizer.countries.ui.screens.home_screen.HomeScreenViewModel" />
     </data>
 
@@ -27,7 +27,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
-                    android:text="@{countryObject.name}"
+                    android:text="@{countryFavObject.name}"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +41,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_star_gray" />
+                    app:srcCompat="@drawable/ic_star_black" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

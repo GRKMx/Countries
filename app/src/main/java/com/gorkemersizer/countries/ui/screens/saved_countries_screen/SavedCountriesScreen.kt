@@ -5,17 +5,36 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import com.gorkemersizer.countries.R
+import com.gorkemersizer.countries.databinding.FragmentSavedCountriesScreenBinding
+import com.gorkemersizer.countries.ui.adapters.CountryFavAdapter
+import com.gorkemersizer.countries.ui.screens.home_screen.HomeScreenViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SavedCountriesScreen : Fragment() {
-
+    private lateinit var binding: FragmentSavedCountriesScreenBinding
+    private lateinit var viewModel: SavedCountriesScreenViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_saved_countries_screen, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_saved_countries_screen, container, false)
+        binding.savedCountriesFragment = this
+
+        viewModel.favList.observe(viewLifecycleOwner) {
+            val adapter = CountryFavAdapter(requireContext(), it, viewModel)
+            binding.countryFavsAdapter = adapter
+        }
+
+        return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val tempViewModel: SavedCountriesScreenViewModel by viewModels()
+        viewModel = tempViewModel
     }
 }

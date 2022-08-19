@@ -1,6 +1,7 @@
 package com.gorkemersizer.countries.ui.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -8,6 +9,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.gorkemersizer.countries.R
 import com.gorkemersizer.countries.data.entity.Country
+import com.gorkemersizer.countries.data.entity.CountryFav
 import com.gorkemersizer.countries.databinding.CountryCardDesignBinding
 import com.gorkemersizer.countries.databinding.FragmentHomeScreenBinding
 import com.gorkemersizer.countries.ui.screens.home_screen.HomeScreenDirections
@@ -35,10 +37,26 @@ class CountryAdapter(
         val country = countryList[position]
         val t =holder.binding
         t.countryObject = country
+        if (viewModel.favList.value!!.contains(CountryFav(country.code!!, country.name!!))){
+            t.imageView.setImageResource(R.drawable.ic_star_black)
+        }
+        else if (!viewModel.favList.value!!.contains(CountryFav(country.code, country.name))){
+            t.imageView.setImageResource(R.drawable.ic_star_gray)
+        }
+
         t.cardRow.setOnClickListener {
             val code = country.code.toString()
             val action = HomeScreenDirections.actionHomeScreenToDetailScreen(code)
             Navigation.findNavController(it).navigate(action)
+        }
+        t.imageView.setOnClickListener {
+            if (viewModel.favList.value!!.contains(CountryFav(country.code, country.name!!))){
+                viewModel.deleteCountryFromFav(country.code, country.name)
+                t.imageView.setImageResource(R.drawable.ic_star_gray)
+            } else {
+                viewModel.addCountryToFav(country.code, country.name)
+                t.imageView.setImageResource(R.drawable.ic_star_black)
+            }
         }
     }
 

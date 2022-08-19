@@ -1,20 +1,22 @@
 package com.gorkemersizer.countries.data.repo
 
 import androidx.lifecycle.MutableLiveData
-import com.gorkemersizer.countries.data.entity.Country
-import com.gorkemersizer.countries.data.entity.CountryDetail
-import com.gorkemersizer.countries.data.entity.CountryDetailResponse
-import com.gorkemersizer.countries.data.entity.CountryResponse
+import com.gorkemersizer.countries.data.entity.*
 import com.gorkemersizer.countries.retrofit.CountriesDao
+import com.gorkemersizer.countries.room.CountryFavsDao
 import com.gorkemersizer.countries.util.Constants.API_KEY
 import com.gorkemersizer.countries.util.Constants.LIMIT
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CountriesDaoRepo(var cdao: CountriesDao) {
+class CountriesDaoRepo(var cdao: CountriesDao, var cfdao: CountryFavsDao) {
     var countryList: MutableLiveData<List<Country>> = MutableLiveData()
     var countryDetail: MutableLiveData<CountryDetail> = MutableLiveData()
+    var favList: MutableLiveData<List<CountryFav>> = MutableLiveData()
 
     fun getCountries() : MutableLiveData<List<Country>> {
         return countryList
@@ -42,5 +44,33 @@ class CountriesDaoRepo(var cdao: CountriesDao) {
             }
             override fun onFailure(call: Call<CountryDetailResponse>?, t: Throwable?) {}
         })
+    }
+
+    // ------------------------------------------------------------------------------------------------------------------------
+
+    fun getCountryFavList() : MutableLiveData<List<CountryFav>> {
+        return favList
+    }
+
+    fun addCountryFav(code: String, name: String) {
+        val job = CoroutineScope(Dispatchers.Main).launch {
+            val newCountryFav = CountryFav(code, name)
+            cfdao.addCountryFav(newCountryFav)
+            getAllCountryFavs()
+        }
+    }
+
+    fun deleteCountryFav(code: String, name: String) {
+        val job = CoroutineScope(Dispatchers.Main).launch {
+            val deletedCountryFav = CountryFav(code, name)
+            cfdao.deleteCountryFav(deletedCountryFav)
+            getAllCountryFavs()
+        }
+    }
+
+    fun getAllCountryFavs() {
+        val job = CoroutineScope(Dispatchers.Main).launch {
+            favList.value = cfdao.getAllFavCountries()
+        }
     }
 }

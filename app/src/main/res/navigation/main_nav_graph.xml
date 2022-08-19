@@ -17,7 +17,11 @@
         android:id="@+id/savedCountriesScreen"
         android:name="com.gorkemersizer.countries.ui.screens.saved_countries_screen.SavedCountriesScreen"
         android:label="fragment_saved_countries_screen"
-        tools:layout="@layout/fragment_saved_countries_screen" />
+        tools:layout="@layout/fragment_saved_countries_screen" >
+        <action
+            android:id="@+id/action_savedCountriesScreen_to_detailScreen"
+            app:destination="@id/detailScreen" />
+    </fragment>
     <fragment
         android:id="@+id/detailScreen"
         android:name="com.gorkemersizer.countries.ui.screens.detail_screen.DetailScreen"
