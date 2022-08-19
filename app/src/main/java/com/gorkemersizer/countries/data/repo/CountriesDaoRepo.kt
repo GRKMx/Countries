@@ -28,22 +28,38 @@ class CountriesDaoRepo(var cdao: CountriesDao, var cfdao: CountryFavsDao) {
 
     fun getAllCountries() {
         cdao.getCountries(API_KEY, LIMIT).enqueue(object: Callback<CountryResponse>{
-            override fun onResponse(call: Call<CountryResponse>?, response: Response<CountryResponse>) {
-                val list = response.body()!!.data
-                countryList.value = list
+            override fun onResponse(
+                call: Call<CountryResponse>,
+                response: Response<CountryResponse>
+            ) {
+                if (response.body()?.data != null) {
+                    val list = response.body()!!.data
+                    countryList.value = list
+                }
+                //val list = response.body()!!.data
+                //countryList.value = list
             }
-            override fun onFailure(call: Call<CountryResponse>?, t: Throwable?) {}
+            override fun onFailure(call: Call<CountryResponse>, t: Throwable) {}
         })
     }
 
     fun getCountry(countryCode: String) {
-        cdao.getCountryDetail(countryCode, API_KEY).enqueue(object: Callback<CountryDetailResponse>{
-            override fun onResponse(call: Call<CountryDetailResponse>?, response: Response<CountryDetailResponse>) {
-                val detail = response.body()!!.data
-                countryDetail.value = detail
-            }
-            override fun onFailure(call: Call<CountryDetailResponse>?, t: Throwable?) {}
-        })
+            cdao.getCountryDetail(countryCode, API_KEY).enqueue(object: Callback<CountryDetailResponse>{
+                override fun onResponse(
+                    call: Call<CountryDetailResponse>,
+                    response: Response<CountryDetailResponse>
+                ) {
+                    if (response.body()?.data != null) {
+                        val detail = response.body()!!.data
+                        countryDetail.value = detail
+                    }
+                    //val detail = response.body().data
+                    //countryDetail.value = detail
+                }
+                //val detail = response.body()!!.data
+                //countryDetail.value = detail
+                override fun onFailure(call: Call<CountryDetailResponse>, t: Throwable) {}
+            })
     }
 
     // ------------------------------------------------------------------------------------------------------------------------

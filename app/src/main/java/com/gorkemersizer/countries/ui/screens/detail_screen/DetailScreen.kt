@@ -6,10 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.*
 import androidx.navigation.Navigation
 import com.bumptech.glide.Glide
 import com.gorkemersizer.countries.R
@@ -34,7 +33,7 @@ class DetailScreen : Fragment() {
 
         viewModel.countryDetail.observe(viewLifecycleOwner) {
             binding.countryDetailObject = viewModel.countryDetail.value
-            binding.imageViewCountry.downloadFromUrl(it.flagImageUri)
+            binding.imageViewCountry.downloadFromUrl(it?.flagImageUri)
         }
         binding.detailScreenFragment = this
         binding.buttonForMoreInfo.setOnClickListener {
@@ -87,6 +86,7 @@ class DetailScreen : Fragment() {
     }
 
     fun backButtonClicked(v: View) {
-        parentFragmentManager.popBackStack()
+        val action = DetailScreenDirections.actionDetailScreenToHomeScreen()
+        Navigation.findNavController(v).navigate(action)
     }
 }

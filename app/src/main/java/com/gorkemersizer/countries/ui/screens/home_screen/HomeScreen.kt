@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.gorkemersizer.countries.R
-import com.gorkemersizer.countries.databinding.ActivityMainBinding
 import com.gorkemersizer.countries.databinding.FragmentHomeScreenBinding
 import com.gorkemersizer.countries.ui.adapters.CountryAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,12 +22,10 @@ class HomeScreen : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home_screen, container, false)
         binding.homeScreenFragment = this
-
         viewModel.countryList.observe(viewLifecycleOwner) {
             val adapter = CountryAdapter(requireContext(), it, viewModel)
             binding.countriesAdapter = adapter
         }
-
         return binding.root
     }
 

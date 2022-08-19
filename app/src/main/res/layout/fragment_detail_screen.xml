@@ -30,18 +30,18 @@
             android:id="@+id/textViewCountryCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="54dp"
+            android:layout_marginTop="44dp"
             android:text="@{countryDetailObject.code}"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/textViewCD"
             app:layout_constraintTop_toBottomOf="@+id/imageViewCountry" />
 
         <Button
             android:id="@+id/buttonForMoreInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="59dp"
+            android:layout_marginStart="32dp"
             android:layout_marginTop="22dp"
             android:text="For More Information ->"
             android:textSize="12sp"
@@ -75,10 +75,26 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="@{countryDetailObject.name}"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/imageViewFavButton"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/imageViewBackButton"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textViewCD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="Country Code: "
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewCountryCode"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textViewCountryCode" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

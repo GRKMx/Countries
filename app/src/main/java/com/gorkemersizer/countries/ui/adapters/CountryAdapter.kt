@@ -14,6 +14,7 @@ import com.gorkemersizer.countries.databinding.CountryCardDesignBinding
 import com.gorkemersizer.countries.databinding.FragmentHomeScreenBinding
 import com.gorkemersizer.countries.ui.screens.home_screen.HomeScreenDirections
 import com.gorkemersizer.countries.ui.screens.home_screen.HomeScreenViewModel
+import java.lang.Exception
 
 class CountryAdapter(
     var mContext: Context,
@@ -47,10 +48,14 @@ class CountryAdapter(
         t.cardRow.setOnClickListener {
             val code = country.code.toString()
             val action = HomeScreenDirections.actionHomeScreenToDetailScreen(code)
-            Navigation.findNavController(it).navigate(action)
+            try {
+                Navigation.findNavController(it).navigate(action)
+            }catch (e: Exception){
+                Log.d("hatayakala","hata yakalandı ${e}")
+            }
         }
         t.imageView.setOnClickListener {
-            if (viewModel.favList.value!!.contains(CountryFav(country.code, country.name!!))){
+            if (viewModel.favList.value!!.contains(CountryFav(country.code, country.name))){
                 viewModel.deleteCountryFromFav(country.code, country.name)
                 t.imageView.setImageResource(R.drawable.ic_star_gray)
             } else {
