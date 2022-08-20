@@ -14,7 +14,6 @@ fun ImageView.downloadFromUrl(url: String?) {
     val request = ImageRequest.Builder(this.context)
         .data(url)
         .target(this)
-        .placeholder(R.drawable.ic_image)
         .error(R.drawable.ic_error)
         .build()
 

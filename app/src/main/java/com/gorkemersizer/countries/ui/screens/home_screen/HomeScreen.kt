@@ -29,6 +29,11 @@ class HomeScreen : Fragment() {
          * Present list of all countries
          */
 
+        binding.swipeRefreshLayoutHomeScreen.setOnRefreshListener {
+            observeData()
+            binding.swipeRefreshLayoutHomeScreen.isRefreshing = false
+        }
+
         observeData()
 
         viewModel.countryList.observe(viewLifecycleOwner) {
@@ -36,11 +41,14 @@ class HomeScreen : Fragment() {
             binding.countriesAdapter = adapter
         }
 
-
         return binding.root
     }
 
-
+    fun refreshData() {
+        binding.countriesLoading.visibility = View.VISIBLE
+        Thread.sleep(2000)
+        observeData()
+    }
 
     fun observeData() {
         viewModel.getAllCountries().observe(viewLifecycleOwner) {
@@ -50,17 +58,19 @@ class HomeScreen : Fragment() {
                         val adapter = CountryAdapter(requireContext(), country.data, viewModel)
                         binding.countriesAdapter = adapter
                     }
-                    //binding.rvCountries.visibility = View.VISIBLE
+                    binding.countriesLoading.visibility = View.GONE
+
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireContext(), it.message+" Too many request! Please click slower", Toast.LENGTH_LONG).show()
+                    //Toast.makeText(requireContext(), it.message+" Too many request! Please click slower", Toast.LENGTH_LONG).show()
+                    refreshData()
                 }
-                Status.LOADING -> {}
+                Status.LOADING -> {
+                    binding.countriesLoading.visibility = View.VISIBLE
+                }
             }
         }
     }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

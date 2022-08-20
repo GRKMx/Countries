@@ -16,6 +16,9 @@ import com.gorkemersizer.countries.util.Constants.WIKI_URL
 import com.gorkemersizer.countries.util.Status
 import com.gorkemersizer.countries.util.downloadFromUrl
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Delay
+import kotlinx.coroutines.delay
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class DetailScreen : Fragment() {
@@ -27,24 +30,14 @@ class DetailScreen : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail_screen, container, false)
 
-        /*
-        viewModel.countryDetail.observe(viewLifecycleOwner) {
-
-            /**
-             * Set the fav icon color
-             */
-
-            if (viewModel.favList.value!!.contains(CountryFav(it.code!!, it.name!!))){
-                binding.imageViewFavButton.setImageResource(R.drawable.ic_star_black)
+        binding.swipeRefreshLayoutDetailScreen.setOnRefreshListener {
+            arguments?.let {
+                val code = DetailScreenArgs.fromBundle(it).code.toString()
+                observeData(code)
             }
-            else if (!viewModel.favList.value!!.contains(CountryFav(it.code, it.name))){
-                binding.imageViewFavButton.setImageResource(R.drawable.ic_star_gray)
-            }
-            binding.countryDetailObject = viewModel.countryDetail.value
-            binding.imageViewCountry.downloadFromUrl(it?.flagImageUri)
+            binding.swipeRefreshLayoutDetailScreen.isRefreshing = false
         }
 
-         */
         arguments?.let {
             val code = DetailScreenArgs.fromBundle(it).code.toString()
             observeData(code)
@@ -55,59 +48,29 @@ class DetailScreen : Fragment() {
         /**
          * Navigate to wikidata when button clicked
          */
-/*
-        binding.buttonForMoreInfo.setOnClickListener {
-            val i =  Intent(Intent.ACTION_VIEW, Uri.parse(WIKI_URL+viewModel.countryDetail.value!!.wikiDataId))
-            startActivity(i)
-        }
-
- */
-
         /**
          * Add or Delete a country to/from favourites item when icon clicked
          */
-/*
-        binding.imageViewFavButton.setOnClickListener {
-            val countryFromDetail = viewModel.countryDetail.value
-            val countryCode = countryFromDetail!!.code!!
-            val countryName = countryFromDetail.name!!
-            if (viewModel.favList.value!!.contains(CountryFav(countryCode, countryName))){
-                viewModel.deleteCountryFromFav(countryCode, countryName)
-                binding.imageViewFavButton.setImageResource(R.drawable.ic_star_gray)
-            } else {
-                viewModel.addCountryToFav(countryCode, countryName)
-                binding.imageViewFavButton.setImageResource(R.drawable.ic_star_black)
-            }
-        }
-
- */
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-/*
+    fun refreshData() {
+        binding.countryLoading.visibility = View.VISIBLE
+        binding.buttonForMoreInfo.visibility = View.GONE
+        binding.textViewCD.visibility = View.GONE
+        Thread.sleep(2000)
         arguments?.let {
             val code = DetailScreenArgs.fromBundle(it).code.toString()
             observeData(code)
         }
-
- */
     }
-
-/*
-        arguments?.let {
-            val code = DetailScreenArgs.fromBundle(it).code.toString()
-            viewModel.getCountry(code)
-        }
-    }
-
- */
 
     fun observeData(code: String) {
         viewModel.getCountry(code).observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.SUCCESS -> {
+                    binding.buttonForMoreInfo.visibility = View.VISIBLE
+                    binding.textViewCD.visibility = View.VISIBLE
                     it.data?.let { country ->
                         viewModel.getCountry(country.data.code.toString())
                         binding.countryDetailObject = country.data
@@ -119,7 +82,6 @@ class DetailScreen : Fragment() {
                         else if (!viewModel.favList.value!!.contains(CountryFav(country.data.code, country.data.name))){
                             binding.imageViewFavButton.setImageResource(R.drawable.ic_star_gray)
                         }
-                        //__
                         binding.imageViewFavButton.setOnClickListener {
                             val countryCode = country.data.code
                             val countryName = country.data.name
@@ -136,15 +98,20 @@ class DetailScreen : Fragment() {
                             startActivity(i)
                         }
                     }
+                    binding.countryLoading.visibility = View.GONE
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireContext(), it.message + "Too many request! Please click slower", Toast.LENGTH_LONG).show()
+                    //Toast.makeText(requireContext(), it.message + "Too many request! Please click slower", Toast.LENGTH_LONG).show()
+                    refreshData()
                 }
-                Status.LOADING -> {}
+                Status.LOADING -> {
+                    binding.countryLoading.visibility = View.VISIBLE
+                    binding.buttonForMoreInfo.visibility = View.GONE
+                    binding.textViewCD.visibility = View.GONE
+                }
             }
         }
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val tempViewModel: DetailScreenViewModel by viewModels()
