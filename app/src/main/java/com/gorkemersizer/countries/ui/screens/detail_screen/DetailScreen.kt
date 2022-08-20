@@ -4,13 +4,16 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.*
 import androidx.navigation.Navigation
 import com.gorkemersizer.countries.R
 import com.gorkemersizer.countries.data.entity.CountryFav
 import com.gorkemersizer.countries.databinding.FragmentDetailScreenBinding
+import com.gorkemersizer.countries.ui.adapters.CountryAdapter
 import com.gorkemersizer.countries.util.Constants.WIKI_URL
+import com.gorkemersizer.countries.util.Status
 import com.gorkemersizer.countries.util.downloadFromUrl
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,6 +27,7 @@ class DetailScreen : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail_screen, container, false)
 
+        /*
         viewModel.countryDetail.observe(viewLifecycleOwner) {
 
             /**
@@ -40,21 +44,29 @@ class DetailScreen : Fragment() {
             binding.imageViewCountry.downloadFromUrl(it?.flagImageUri)
         }
 
+         */
+        arguments?.let {
+            val code = DetailScreenArgs.fromBundle(it).code.toString()
+            observeData(code)
+        }
+
         binding.detailScreenFragment = this
 
         /**
          * Navigate to wikidata when button clicked
          */
-
+/*
         binding.buttonForMoreInfo.setOnClickListener {
             val i =  Intent(Intent.ACTION_VIEW, Uri.parse(WIKI_URL+viewModel.countryDetail.value!!.wikiDataId))
             startActivity(i)
         }
 
+ */
+
         /**
          * Add or Delete a country to/from favourites item when icon clicked
          */
-
+/*
         binding.imageViewFavButton.setOnClickListener {
             val countryFromDetail = viewModel.countryDetail.value
             val countryCode = countryFromDetail!!.code!!
@@ -67,15 +79,69 @@ class DetailScreen : Fragment() {
                 binding.imageViewFavButton.setImageResource(R.drawable.ic_star_black)
             }
         }
+
+ */
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+/*
+        arguments?.let {
+            val code = DetailScreenArgs.fromBundle(it).code.toString()
+            observeData(code)
+        }
 
+ */
+    }
+
+/*
         arguments?.let {
             val code = DetailScreenArgs.fromBundle(it).code.toString()
             viewModel.getCountry(code)
+        }
+    }
+
+ */
+
+    fun observeData(code: String) {
+        viewModel.getCountry(code).observe(viewLifecycleOwner) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    it.data?.let { country ->
+                        viewModel.getCountry(country.data.code.toString())
+                        binding.countryDetailObject = country.data
+                        binding.imageViewCountry.downloadFromUrl(country.data.flagImageUri)
+
+                        if (viewModel.favList.value!!.contains(CountryFav(country.data.code!!, country.data.name!!))){
+                            binding.imageViewFavButton.setImageResource(R.drawable.ic_star_black)
+                        }
+                        else if (!viewModel.favList.value!!.contains(CountryFav(country.data.code, country.data.name))){
+                            binding.imageViewFavButton.setImageResource(R.drawable.ic_star_gray)
+                        }
+                        //__
+                        binding.imageViewFavButton.setOnClickListener {
+                            val countryCode = country.data.code
+                            val countryName = country.data.name
+                            if (viewModel.favList.value!!.contains(CountryFav(countryCode, countryName))){
+                                viewModel.deleteCountryFromFav(countryCode, countryName)
+                                binding.imageViewFavButton.setImageResource(R.drawable.ic_star_gray)
+                            } else {
+                                viewModel.addCountryToFav(countryCode, countryName)
+                                binding.imageViewFavButton.setImageResource(R.drawable.ic_star_black)
+                            }
+                        }
+                        binding.buttonForMoreInfo.setOnClickListener {
+                            val i =  Intent(Intent.ACTION_VIEW, Uri.parse(WIKI_URL+country.data.wikiDataId.toString()))
+                            startActivity(i)
+                        }
+                    }
+                }
+                Status.ERROR -> {
+                    Toast.makeText(requireContext(), it.message + "Too many request! Please click slower", Toast.LENGTH_LONG).show()
+                }
+                Status.LOADING -> {}
+            }
         }
     }
 

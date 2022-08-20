@@ -1,14 +1,14 @@
 package com.gorkemersizer.countries.data.repo
 
+import android.util.Log
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.MutableLiveData
 import com.gorkemersizer.countries.data.entity.*
 import com.gorkemersizer.countries.retrofit.CountriesDao
 import com.gorkemersizer.countries.room.CountryFavsDao
 import com.gorkemersizer.countries.util.Constants.API_KEY
 import com.gorkemersizer.countries.util.Constants.LIMIT
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -42,6 +42,14 @@ class CountriesDaoRepo(var cdao: CountriesDao, var cfdao: CountryFavsDao) {
      *  Get list of country by api
      */
 
+    //suspend fun getAllCountries() = cdao.getCountries(API_KEY, LIMIT)
+
+    suspend fun getAllCountries(): CountryResponse {
+        Log.d("daorepo","daorepo all country çalıştı")
+        return cdao.getCountries(API_KEY, LIMIT)
+    }
+
+/*
     fun getAllCountries() {
         cdao.getCountries(API_KEY, LIMIT).enqueue(object: Callback<CountryResponse>{
             override fun onResponse(
@@ -57,10 +65,28 @@ class CountriesDaoRepo(var cdao: CountriesDao, var cfdao: CountryFavsDao) {
         })
     }
 
+ */
+
+
+
     /**
      *  Get the country by api
      */
 
+    //suspend fun getCountry(countryCode: String) = cdao.getCountryDetail(countryCode, API_KEY)
+/*
+    suspend fun getCountry(): CountryDetailResponse {
+        return cdao.getCountryDetail(API_KEY, LIMIT)
+    }
+
+ */
+
+    suspend fun getCountry(countryCode: String): CountryDetailResponse {
+        Log.d("daorepo","daorepo detail country çalıştı")
+        return cdao.getCountryDetail(countryCode, API_KEY)
+    }
+
+/*
     fun getCountry(countryCode: String) {
             cdao.getCountryDetail(countryCode, API_KEY).enqueue(object: Callback<CountryDetailResponse>{
                 override fun onResponse(
@@ -75,6 +101,9 @@ class CountriesDaoRepo(var cdao: CountriesDao, var cfdao: CountryFavsDao) {
                 override fun onFailure(call: Call<CountryDetailResponse>, t: Throwable) {}
             })
     }
+
+ */
+
 
     /**
      *   Saved Countries ---------------------------------------------------------------------------

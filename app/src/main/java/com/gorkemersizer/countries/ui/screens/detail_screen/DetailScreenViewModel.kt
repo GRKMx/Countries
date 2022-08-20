@@ -3,10 +3,14 @@ package com.gorkemersizer.countries.ui.screens.detail_screen
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import com.gorkemersizer.countries.data.entity.CountryDetail
 import com.gorkemersizer.countries.data.entity.CountryFav
 import com.gorkemersizer.countries.data.repo.CountriesDaoRepo
+import com.gorkemersizer.countries.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,9 +28,21 @@ class DetailScreenViewModel @Inject constructor(var crepo: CountriesDaoRepo): Vi
      * Get a country with details by api
      */
 
+    fun getCountry(countryCode: String) = liveData (Dispatchers.IO) {
+        emit(Resource.loading(null))
+        try {
+            emit(Resource.success(crepo.getCountry(countryCode)))
+        } catch (e: Exception) {
+            emit(Resource.error(e.message ?: "Error Occurred!",null))
+        }
+    }
+
+/*
     fun getCountry(countryCode: String) {
         crepo.getCountry(countryCode)
     }
+
+ */
 
     /**
      * Get a list of saved countries from database
