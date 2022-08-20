@@ -4,21 +4,17 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.*
 import androidx.navigation.Navigation
 import com.gorkemersizer.countries.R
 import com.gorkemersizer.countries.data.entity.CountryFav
 import com.gorkemersizer.countries.databinding.FragmentDetailScreenBinding
-import com.gorkemersizer.countries.ui.adapters.CountryAdapter
+import com.gorkemersizer.countries.util.Constants.REQUEST_TIME
 import com.gorkemersizer.countries.util.Constants.WIKI_URL
 import com.gorkemersizer.countries.util.Status
 import com.gorkemersizer.countries.util.downloadFromUrl
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Delay
-import kotlinx.coroutines.delay
-import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class DetailScreen : Fragment() {
@@ -29,6 +25,11 @@ class DetailScreen : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail_screen, container, false)
+        binding.detailScreenFragment = this
+
+        /**
+         * Refresh screen when swiped
+         */
 
         binding.swipeRefreshLayoutDetailScreen.setOnRefreshListener {
             arguments?.let {
@@ -38,32 +39,36 @@ class DetailScreen : Fragment() {
             binding.swipeRefreshLayoutDetailScreen.isRefreshing = false
         }
 
+        /**
+         * Get code of clicked country and run observeData
+         */
+
         arguments?.let {
             val code = DetailScreenArgs.fromBundle(it).code.toString()
             observeData(code)
         }
 
-        binding.detailScreenFragment = this
-
-        /**
-         * Navigate to wikidata when button clicked
-         */
-        /**
-         * Add or Delete a country to/from favourites item when icon clicked
-         */
         return binding.root
     }
+
+    /**
+     * Refresh screen
+     */
 
     fun refreshData() {
         binding.countryLoading.visibility = View.VISIBLE
         binding.buttonForMoreInfo.visibility = View.GONE
         binding.textViewCD.visibility = View.GONE
-        Thread.sleep(2000)
+        Thread.sleep(REQUEST_TIME) // Prevent 429 - Too many request error caused by api
         arguments?.let {
             val code = DetailScreenArgs.fromBundle(it).code.toString()
             observeData(code)
         }
     }
+
+    /**
+     * Observe a country
+     */
 
     fun observeData(code: String) {
         viewModel.getCountry(code).observe(viewLifecycleOwner) {
@@ -71,6 +76,11 @@ class DetailScreen : Fragment() {
                 Status.SUCCESS -> {
                     binding.buttonForMoreInfo.visibility = View.VISIBLE
                     binding.textViewCD.visibility = View.VISIBLE
+                    binding.imageViewBackButton.visibility = View.VISIBLE
+                    binding.imageViewFavButton.visibility = View.VISIBLE
+                    /**
+                     * Get a country detail
+                     */
                     it.data?.let { country ->
                         viewModel.getCountry(country.data.code.toString())
                         binding.countryDetailObject = country.data
@@ -82,6 +92,9 @@ class DetailScreen : Fragment() {
                         else if (!viewModel.favList.value!!.contains(CountryFav(country.data.code, country.data.name))){
                             binding.imageViewFavButton.setImageResource(R.drawable.ic_star_gray)
                         }
+                        /**
+                         * Add/Delete a country to/from favourites
+                         */
                         binding.imageViewFavButton.setOnClickListener {
                             val countryCode = country.data.code
                             val countryName = country.data.name
@@ -93,6 +106,9 @@ class DetailScreen : Fragment() {
                                 binding.imageViewFavButton.setImageResource(R.drawable.ic_star_black)
                             }
                         }
+                        /**
+                         * Navigate to WikiData
+                         */
                         binding.buttonForMoreInfo.setOnClickListener {
                             val i =  Intent(Intent.ACTION_VIEW, Uri.parse(WIKI_URL+country.data.wikiDataId.toString()))
                             startActivity(i)
@@ -101,7 +117,9 @@ class DetailScreen : Fragment() {
                     binding.countryLoading.visibility = View.GONE
                 }
                 Status.ERROR -> {
-                    //Toast.makeText(requireContext(), it.message + "Too many request! Please click slower", Toast.LENGTH_LONG).show()
+                    /**
+                     * Try to get the data with delay
+                     */
                     refreshData()
                 }
                 Status.LOADING -> {
@@ -119,7 +137,7 @@ class DetailScreen : Fragment() {
     }
 
     /**
-     * Navigate home page when button clicked
+     * Navigate to home page
      */
 
     fun backButtonClicked(v: View) {

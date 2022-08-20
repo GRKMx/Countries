@@ -32,6 +32,18 @@ class SavedCountriesScreen : Fragment() {
             binding.countryFavsAdapter = adapter
         }
 
+        /**
+         * Refresh screen when swiped
+         */
+
+        binding.swipeRefreshLayoutSavedCountriesScreen.setOnRefreshListener {
+            viewModel.favList.observe(viewLifecycleOwner) {
+                val adapter = CountryFavAdapter(requireContext(), it, viewModel)
+                binding.countryFavsAdapter = adapter
+            }
+            binding.swipeRefreshLayoutSavedCountriesScreen.isRefreshing = false
+        }
+
         return binding.root
     }
 

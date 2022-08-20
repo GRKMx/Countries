@@ -5,12 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.gorkemersizer.countries.R
 import com.gorkemersizer.countries.databinding.FragmentHomeScreenBinding
 import com.gorkemersizer.countries.ui.adapters.CountryAdapter
+import com.gorkemersizer.countries.util.Constants.REQUEST_TIME
 import com.gorkemersizer.countries.util.Status
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,7 +26,7 @@ class HomeScreen : Fragment() {
         binding.homeScreenFragment = this
 
         /**
-         * Present list of all countries
+         * Refresh screen when swiped
          */
 
         binding.swipeRefreshLayoutHomeScreen.setOnRefreshListener {
@@ -35,34 +35,40 @@ class HomeScreen : Fragment() {
         }
 
         observeData()
-
-        viewModel.countryList.observe(viewLifecycleOwner) {
-            val adapter = CountryAdapter(requireContext(), it, viewModel)
-            binding.countriesAdapter = adapter
-        }
-
         return binding.root
     }
 
+    /**
+     * Refresh screen
+     */
+
     fun refreshData() {
         binding.countriesLoading.visibility = View.VISIBLE
-        Thread.sleep(2000)
+        Thread.sleep(REQUEST_TIME) // Prevent 429 - Too many request error caused by api
         observeData()
     }
+
+    /**
+     * Observe countries
+     */
 
     fun observeData() {
         viewModel.getAllCountries().observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.SUCCESS -> {
+                    /**
+                     * Get a list of countries and set adapter
+                     */
                     it.data?.let { country ->
                         val adapter = CountryAdapter(requireContext(), country.data, viewModel)
                         binding.countriesAdapter = adapter
                     }
                     binding.countriesLoading.visibility = View.GONE
-
                 }
                 Status.ERROR -> {
-                    //Toast.makeText(requireContext(), it.message+" Too many request! Please click slower", Toast.LENGTH_LONG).show()
+                    /**
+                     * Try to get the data with delay
+                     */
                     refreshData()
                 }
                 Status.LOADING -> {

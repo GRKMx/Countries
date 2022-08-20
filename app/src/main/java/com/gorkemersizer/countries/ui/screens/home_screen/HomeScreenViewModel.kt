@@ -14,12 +14,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(var crepo: CountriesDaoRepo): ViewModel() {
-    var countryList = MutableLiveData<List<Country>>()
+
     var favList = MutableLiveData<List<CountryFav>>()
 
     init {
-        //getAllCountries()
-        //countryList = crepo.getCountries()
         getFavList()
         favList = crepo.getCountryFavList()
     }
@@ -36,17 +34,6 @@ class HomeScreenViewModel @Inject constructor(var crepo: CountriesDaoRepo): View
             emit(Resource.error(e.message ?: "Error Occurred!", null))
         }
     }
-
-
-
-/*
-    fun getAllCountries() {
-        crepo.getAllCountries()
-    }
-
- */
-
-
 
     /**
      * Get list of saved country from database
