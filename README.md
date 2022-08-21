@@ -19,4 +19,4 @@ and more...
 
 # Screenshots
 
-<img src="https://user-images.githubusercontent.com/79326983/185784564-ae80811f-c612-4de4-ad78-06e92f67b90d.png" width="200">     <img src="https://user-images.githubusercontent.com/79326983/185784559-5b083e37-2644-4ffb-a784-45536c972f21.png" width="200">     <img src="https://user-images.githubusercontent.com/79326983/185784562-d08da74f-e021-4f8b-9e69-2f8735516cc8.png" width="200">     <img src="https://user-images.githubusercontent.com/79326983/185784563-419dd746-703c-41a2-964f-92f0c72962e5.png" width="200">     
+<img src="https://user-images.githubusercontent.com/79326983/185784564-ae80811f-c612-4de4-ad78-06e92f67b90d.png" width="200">     <img src="https://user-images.githubusercontent.com/79326983/185784559-5b083e37-2644-4ffb-a784-45536c972f21.png" width="200">     <img src="https://user-images.githubusercontent.com/79326983/185784562-d08da74f-e021-4f8b-9e69-2f8735516cc8.png" width="200">     
