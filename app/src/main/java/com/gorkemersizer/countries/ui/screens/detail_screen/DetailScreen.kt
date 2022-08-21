@@ -115,6 +115,8 @@ class DetailScreen : Fragment() {
                         }
                     }
                     binding.countryLoading.visibility = View.GONE
+                    binding.textViewCD.visibility = View.VISIBLE
+                    binding.buttonForMoreInfo.visibility = View.VISIBLE
                 }
                 Status.ERROR -> {
                     /**
